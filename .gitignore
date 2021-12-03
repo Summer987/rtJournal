@@ -1,0 +1,16 @@
+# artifacts
+packages/**/build
+.snowpack
+node_modules
+releases
+lib
+dist
+
+# other
+*.log
+
+
+# system other
+.DS_Store
+.hidden
+.next
