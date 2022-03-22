@@ -1,7 +1,14 @@
-import {Paper, Typography} from "@material-ui/core";
+import {IconButton, Paper, Typography} from "@material-ui/core";
 import Image from "next/image";
 
 import styles from './Post.module.scss';
+
+import {
+  ModeCommentOutlined as CommentsIcon,
+  Cached as RefreshIcon,
+  BookmarkBorderOutlined as FavoriteIcon,
+  ShareOutlined as ShareIcon
+} from '@material-ui/icons'
 
 export const Post = () => {
   return (
@@ -17,6 +24,28 @@ export const Post = () => {
         height={400}
         width={600}
       />
-    </Paper>
+      <ul className={styles.actions}>
+        <li>
+          <IconButton>
+            <CommentsIcon />
+          </IconButton>
+        </li>
+        <li>
+          <IconButton>
+            <RefreshIcon />
+          </IconButton>
+        </li>
+        <li>
+          <IconButton>
+            <FavoriteIcon />
+          </IconButton>
+        </li>
+        <li>
+          <IconButton>
+            <ShareIcon />
+          </IconButton>
+        </li>
+      </ul>
+    </Paper> 
   )
 }
