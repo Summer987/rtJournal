@@ -7,20 +7,22 @@ interface MainLayoutProps {
   hideComments?: boolean;
   contentFullWidth?: boolean;
   className?: string;
+  hideMenu?: boolean
 }
 
 export const MainLayout: React.FC<MainLayoutProps> = ({
-                                                        children,
-                                                        contentFullWidth,
-                                                        hideComments,
-                                                        className,
-                                                      }) => {
+    children,
+    contentFullWidth,
+    hideComments,
+    hideMenu,
+    className,
+  }) => {
 
   return (
     <div className={clsx('wrapper', className)}>
-      <div className="leftSide">
-        <LeftMenu />
-      </div>
+      {!hideMenu && (<div className="leftSide">
+        <LeftMenu/>
+      </div>)}
       <div className={clsx('content', { 'content--full': contentFullWidth })}>{children}</div>
       {!hideComments && (
         <div className="rightSide">
