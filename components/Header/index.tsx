@@ -1,53 +1,56 @@
-import React from "react";
-import styles from './Header.module.scss'
-
+import React from 'react';
+import Link from 'next/link';
+import { Paper, Button, IconButton, Avatar } from '@material-ui/core';
 import {
-  Search as SearchIcon,
-  Create as CreateIcon,
-  MessageOutlined as MessageIcon,
-  NotificationsNoneOutlined as NotificationIcon,
+  SearchOutlined as SearchIcon,
+  SmsOutlined as MessageIcon,
   Menu as MenuIcon,
-  KeyboardArrowDownOutlined as ArrowButton,
-} from '@material-ui/icons'
+  ExpandMoreOutlined as ArrowBottom,
+  NotificationsNoneOutlined as NotificationIcon,
+} from '@material-ui/icons';
 
-import {Paper, Button, IconButton, Avatar} from "@material-ui/core";
-
+import styles from './Header.module.scss';
 
 export const Header: React.FC = () => {
   return (
-    <Paper classes={{root: styles.root}} elevation={0}>
-      <div className='d-flex align-center'>
+    <Paper classes={{ root: styles.root }} elevation={0}>
+      <div className="d-flex align-center">
         <IconButton>
           <MenuIcon />
         </IconButton>
-        <svg className={styles.logo} viewBox="0 0 24 25">
-          <path fill="#e8a427" d="M0 19h8.5v6H0v-6z"></path>
-          <path d="M0 7h8.5v18l6.5-6V7h9V0H0v7z"></path>
-          <path fill="rgba(0,0,0,0.15)" d="M7.5 19h1v6l-1-6z"></path>
-        </svg>
+        <Link href="/">
+          <a>
+            <img height={35} className="mr-20" src="/static/img/logo.svg" alt="Logo" />
+          </a>
+        </Link>
+
         <div className={styles.searchBlock}>
-          <SearchIcon/>
-          <input placeholder='Поиск'/>
+          <SearchIcon />
+          <input placeholder="Поиск" />
         </div>
 
-        <Button variant='contained' className={styles.penButton}>
+        <Button variant="contained" className={styles.penButton}>
           Новая запись
         </Button>
       </div>
-      <div className='d-flex align-center'>
+      <div className="d-flex align-center">
         <IconButton>
           <MessageIcon />
         </IconButton>
         <IconButton>
           <NotificationIcon />
         </IconButton>
-        <Avatar
-          className={styles.avatar}
-          alt="Remy Sharp"
-          src="https://leonardo.osnova.io/5ffeac9a-a0e5-5be6-98af-659bfaabd2a6/-/scale_crop/108x108/-/format/webp/"
-        />
-        <ArrowButton />
+        <Link href="/profile/1">
+          <a className="d-flex align-center">
+            <Avatar
+              className={styles.avatar}
+              alt="Remy Sharp"
+              src="https://leonardo.osnova.io/5ffeac9a-a0e5-5be6-98af-659bfaabd2a6/-/scale_crop/108x108/-/format/webp/"
+            />
+            <ArrowBottom />
+          </a>
+        </Link>
       </div>
     </Paper>
-  )
-}
+  );
+};
