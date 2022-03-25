@@ -1,0 +1,22 @@
+.addCommentBlock {
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.3);
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  padding: 10px 17px 10px 15px !important;
+  margin-top: 15px;
+  margin-bottom: 30px;
+
+}
+
+.fieldRoot {
+  cursor: pointer !important;
+
+  &:after, &:before {
+    display: none;
+  }
+}
+
+.addButton {
+  margin-top: 10px !important;
+}
