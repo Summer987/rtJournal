@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {setCookie} from "nookies";
-import {Button, TextField} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import {FormField} from "../../FormField";
 import {useForm,FormProvider} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -8,6 +8,8 @@ import {RegisterFormSchema} from "../../../utils/yupSchemas";
 import {UserApi} from "../../../utils/api";
 import {CreateUserDto} from "../../../utils/api/types";
 import Alert from "@material-ui/lab/Alert";
+import {setUserData} from "../../../redux/slices/user";
+import {useAppDispatch} from "../../../redux/hooks";
 
 interface registerFormProps {
   onOpenRegister: () => void
@@ -15,6 +17,7 @@ interface registerFormProps {
 }
 
 export const Register: React.FC<registerFormProps> = ({onOpenRegister,onOpenLogin}) => {
+  const dispatch = useAppDispatch()
   const [errorMessage, setErrorMessage] = useState('')
 
   const form = useForm({
@@ -29,6 +32,7 @@ export const Register: React.FC<registerFormProps> = ({onOpenRegister,onOpenLogi
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       })
+      dispatch(setUserData(data))
     } catch(err) {
       console.warn('Ошибка при регистрации', err)
       if (err.response) {

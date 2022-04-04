@@ -8,6 +8,8 @@ import {FormField} from "../../FormField";
 import {UserApi} from "../../../utils/api";
 import {setCookie} from "nookies";
 import {CreateUserDto, LoginDto} from "../../../utils/api/types";
+import {useAppDispatch} from "../../../redux/hooks";
+import {setUserData} from "../../../redux/slices/user";
 
 
 interface loginFormProps {
@@ -15,6 +17,7 @@ interface loginFormProps {
 }
 
 export const Login: React.FC<loginFormProps> = ({onOpenRegister}) => {
+  const dispatch = useAppDispatch()
   const [errorMessage, setErrorMessage] = useState('')
 
   const form = useForm({
@@ -31,6 +34,7 @@ export const Login: React.FC<loginFormProps> = ({onOpenRegister}) => {
         path: '/',
       })
       setErrorMessage('')
+      dispatch(setUserData(data))
     } catch(err) {
       console.warn('Ошибка при авторизации', err)
       if (err.response) {
