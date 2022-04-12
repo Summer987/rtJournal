@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {
   Paper,
@@ -31,6 +31,12 @@ export const Header: React.FC = () => {
   const closeAuthDialog = () => {
     setAuthVisible(false);
   };
+
+  useEffect(() => {
+    if (authVisible && userData) {
+      setAuthVisible(false)
+    }
+  }, [authVisible, userData])
 
   return (
     <Paper classes={{ root: styles.root }} elevation={0}>

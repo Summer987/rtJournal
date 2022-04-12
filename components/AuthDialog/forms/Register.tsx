@@ -5,11 +5,11 @@ import {FormField} from "../../FormField";
 import {useForm,FormProvider} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {RegisterFormSchema} from "../../../utils/yupSchemas";
-import {UserApi} from "../../../utils/api";
 import {CreateUserDto} from "../../../utils/api/types";
 import Alert from "@material-ui/lab/Alert";
 import {setUserData} from "../../../redux/slices/user";
 import {useAppDispatch} from "../../../redux/hooks";
+import {Api} from "../../../utils/api";
 
 interface registerFormProps {
   onOpenRegister: () => void
@@ -27,7 +27,7 @@ export const Register: React.FC<registerFormProps> = ({onOpenRegister,onOpenLogi
 
   const onSubmit = async (dto: CreateUserDto) => {
     try {
-      const data = await UserApi.register(dto)
+      const data = await Api().user.register(dto)
       setCookie(null,'authToken', data.token, {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',

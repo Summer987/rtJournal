@@ -10,6 +10,8 @@ import 'macro-css'
 import '../styles/globals.scss'
 import {wrapper} from "../redux/store";
 import {AppProps} from "next/app";
+import {setUserData} from "../redux/slices/user";
+import {Api} from "../utils/api";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -31,5 +33,30 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   )
 }
+
+MyApp.getInitialProps = wrapper.getInitialAppProps(store =>
+  async ({ctx, Component}) => {
+    try {
+      const userData = await Api(ctx).user.getMe()
+      store.dispatch(setUserData(userData))
+    } catch (err) {
+      if (ctx.asPath === '/write') {
+        ctx.res?.writeHead(302, {
+          Location: '/403'
+        })
+        ctx.res?.end()
+      }
+      console.log(err)
+    }
+
+    return {
+      pageProps: {
+        ...(Component.getInitialProps
+            ? await Component.getInitialProps(({...ctx, store}))
+            : {}
+        )
+      },
+    }
+})
 
 export default wrapper.withRedux(MyApp)

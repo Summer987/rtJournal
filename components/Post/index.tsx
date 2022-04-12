@@ -6,23 +6,33 @@ import Image from "next/image";
 import styles from './Post.module.scss';
 import {PostActions} from "../PostActions";
 
-export const Post = () => {
+interface PostProps {
+  title: string
+  id: number
+  description?: string
+  imageUrl?: string
+}
+
+export const Post: React.FC<PostProps> = ({title, description, imageUrl, id}) => {
   return (
     <Paper elevation={0} className='p-20' classes={{ root: styles.paper}}>
       <Typography variant='h5' className={styles.title}>
-        <Link href='/news/test-123'>
-          Британские инженеры представили робота с «жестами и мимикой человека» — это восхитило и напугало людей в сети
+        <Link href={`/news/${id}`}>
+          {title}
         </Link>
       </Typography>
       <Typography className='mt-10 mb-15'>
-        «Самый передовой человекоподобный робот» Ameca пытается нравиться людям, но некоторых пугает естественность его движений.
+        {description}
       </Typography>
-      <Image
-        src='https://leonardo.osnova.io/37d5dbb9-2d72-505d-b1f5-d753d6bc54bf/-/preview/1300/-/format/webp/'
-        height={400}
-        width={600}
-      />
+      {imageUrl &&
+        <Image
+            src={imageUrl}
+            height={400}
+            width={600}
+            alt={title}
+        />
+      }
       <PostActions />
-    </Paper> 
+    </Paper>
   )
 }
