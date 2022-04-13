@@ -1,17 +1,21 @@
 import React from 'react';
-import {Typography, IconButton, MenuItem, Menu} from '@material-ui/core';
+import {Typography, IconButton, MenuItem, Menu, Avatar} from '@material-ui/core';
 import MoreIcon from '@material-ui/icons/MoreHorizOutlined';
 
 import styles from './Comment.module.scss';
+import {ResponseUser, TComment} from "../../utils/api/types";
+import {Api} from "../../utils/api";
 
 interface CommentProps {
-  user: {
-    fullName: string
-  },
+  id: number
+  user: ResponseUser,
   text: string
+  createdAt: string
+  currentUserId: number
+  onRemoveComment: (id: number) => void
 }
 
-export const Comment: React.FC<CommentProps> = ({user, text}) => {
+export const Comment: React.FC<CommentProps> = ({onRemoveComment,id,currentUserId,user, text, createdAt}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -21,29 +25,46 @@ export const Comment: React.FC<CommentProps> = ({user, text}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleClickRemove = async () => {
+    if (window.confirm('Удалить комментарий?')){
+      try {
+        await Api().comment.remove(id)
+        onRemoveComment(id)
+      } catch(err) {
+        console.warn('Error remove comment, err', err)
+        alert('Не удвлось удалить комментарий')
+      } finally {
+        handleClose()
+      }
+    }
+  }
+
   return (
     <div className={styles.comment}>
       <div className={styles.userInfo}>
-        <img
-          src="https://leonardo.osnova.io/2810b9bb-071f-8a49-2290-2f92ca6797cd/-/scale_crop/108x108/-/format/webp/"
-          alt="Avatar"
-        />
-        <b>Master Quotry</b>
+        <Avatar>{user?.fullName[0] || ''}</Avatar>
+        <b>{user.fullName}</b>
+        <span>{createdAt}</span>
       </div>
-      <Typography className={styles.text}>Просто комментарий, который типо большой и очень много чего написано вообще але</Typography>
-      <span className={styles.replyBtn}>Ответить</span>
-      <IconButton onClick={handleClick}>
-        <MoreIcon />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        elevation={2}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}>
-        <MenuItem onClick={handleClose}>Удалить</MenuItem>
-        <MenuItem onClick={handleClose}>Редактировать</MenuItem>
-      </Menu>
+      <Typography className={styles.text}>{text}</Typography>
+      {user?.id === currentUserId &&
+        <>
+          <span className={styles.replyBtn}>Ответить</span>
+          <IconButton onClick={handleClick}>
+            <MoreIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            elevation={2}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}>
+            <MenuItem onClick={handleClickRemove}>Удалить</MenuItem>
+            <MenuItem onClick={handleClose}>Редактировать</MenuItem>
+          </Menu>
+        </>
+      }
     </div>
   );
 };

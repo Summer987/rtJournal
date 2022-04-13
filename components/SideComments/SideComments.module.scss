@@ -2,7 +2,7 @@
   width: 320px;
   margin-bottom: 2px;
   position: sticky;
-  top: 80px;
+  top: 90px;
   margin-left: 40px;
 
   h3 {
@@ -21,8 +21,23 @@
   }
 }
 
+.rotated {
+  width: 100px;
+  transform: rotate(-90deg) translateX(-50px);
+  transform-origin: right;
+
+  svg {
+    transform: rotate(270deg);
+  }
+}
+
 .commentItem {
   margin-bottom: 25px;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 20px;
+  }
 }
 
 .userInfo {
@@ -34,6 +49,10 @@
     height: 24px;
     border-radius: 3px;
     margin-right: 8px;
+  }
+
+  a {
+    margin-left: 15px;
   }
 }
 

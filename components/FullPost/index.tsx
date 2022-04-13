@@ -5,25 +5,29 @@ import styles from './FullPost.module.scss'
 import {PostActions} from "../PostActions";
 import MessageIcon from '@material-ui/icons/MessageOutlined';
 import UserAddIcon from '@material-ui/icons/PersonAddOutlined';
+import {OutputData} from "@editorjs/editorjs";
 
-export const FullPost: React.FC = () => {
+interface FullPostProps {
+  title: string
+  blocks: OutputData['blocks']
+}
+
+export const FullPost: React.FC<FullPostProps> = ({title, blocks}) => {
 
   return (
     <Paper elevation={0} className={styles.paper}>
       <div className='container'>
         <Typography variant='h4' className={styles.title}>
-          Журналистка «Фонтанки» нашла в Петербурге фабрику комментариев о событиях на Украине и устроилась туда «спамером»
+          {title}
         </Typography>
-        <div>
-          <Typography>
-            Петербургское издание «Фонтанка» провело расследование: корреспондентка сходила на собеседование по объявлению из телеграм-канала «Кибер фронт Z» и сутки проработала на «фабрике» по написанию комментариев о событиях на Украине.
-          </Typography>
-          <Typography>
-            В телеграм-канале с вакансией указывалось, что команда намерена «дать отпор в информационном поле пропагандистам киевской хунты, финансируемой западным миром». Журналистка успешно прошла собеседование на позицию «спамера» с «чёрной» зарплатой 45 тысяч рублей в месяц и графиком 2/2.
-          </Typography>
-          <Typography>
-            Смена состоит из 100 человек, а сотрудники разделены по направлениям: каждое ответственно за определённую соцсеть — от ютуба и тиктока до телеграма. При найме корреспондентке сказали, что спамеры не работают во «ВКонтакте», поскольку там «информация более-менее нейтральная». В день нужно публиковать 200 комментариев. С личного аккаунта их писать не требуется, поскольку сотрудникам раздают фейковые профили.
-          </Typography>
+        <div className={styles.text}>
+          {
+            blocks.map(obj =>
+              <Typography
+                key={obj.id}
+                dangerouslySetInnerHTML={{ __html: obj.data.text}}
+              />)
+          }
         </div>
         <div style={{width: 250}}>
           <PostActions />
