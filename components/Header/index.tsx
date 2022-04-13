@@ -4,7 +4,7 @@ import {
   Paper,
   Button,
   IconButton,
-  Avatar,
+  Avatar, List, ListItem
 } from '@material-ui/core';
 import {
   SearchOutlined as SearchIcon,
@@ -19,10 +19,13 @@ import styles from './Header.module.scss';
 import {AuthDialog} from "../AuthDialog";
 import {useAppSelector} from "../../redux/hooks";
 import {selectUserData} from "../../redux/slices/user";
+import {Api} from "../../utils/api";
 
 export const Header: React.FC = () => {
   const userData = useAppSelector(selectUserData)
   const [authVisible, setAuthVisible] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const [posts, setPosts] = useState([])
 
   const openAuthDialog = () => {
     setAuthVisible(true);
@@ -38,6 +41,17 @@ export const Header: React.FC = () => {
     }
   }, [authVisible, userData])
 
+  const handleChangeInput = async (e) => {
+    setSearchValue(e.target.value);
+    try {
+      const { items } = await Api().post.search({ title: e.target.value });
+      setPosts(items);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+
   return (
     <Paper classes={{ root: styles.root }} elevation={0}>
       <div className="d-flex align-center">
@@ -52,7 +66,22 @@ export const Header: React.FC = () => {
 
         <div className={styles.searchBlock}>
           <SearchIcon />
-          <input placeholder="Поиск" />
+          <input value={searchValue} onChange={handleChangeInput} placeholder="Поиск" />
+          {posts.length > 0 &&
+            <Paper className={styles.searchBlockPopup}>
+                <List>
+                  {posts.map(obj => (
+                    <Link href={`/news/${obj.id}`}>
+                      <a>
+                        <ListItem button key={obj.id}>
+                          {obj.title}
+                        </ListItem>
+                      </a>
+                    </Link>
+                  ))}
+                </List>
+            </Paper>
+          }
         </div>
 
         <Link href='/write'>
@@ -71,7 +100,7 @@ export const Header: React.FC = () => {
           <NotificationIcon />
         </IconButton>
         {userData ? (
-          <Link href="/profile/1">
+          <Link href={`/profile/${userData.id}`}>
             <a className="d-flex align-center">
               <Avatar
                 className={styles.avatar}

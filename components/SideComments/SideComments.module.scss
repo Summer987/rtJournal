@@ -33,6 +33,11 @@
 
 .commentItem {
   margin-bottom: 25px;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 20px;
+  }
 }
 
 .userInfo {
@@ -44,6 +49,10 @@
     height: 24px;
     border-radius: 3px;
     margin-right: 8px;
+  }
+
+  a {
+    margin-left: 15px;
   }
 }
 

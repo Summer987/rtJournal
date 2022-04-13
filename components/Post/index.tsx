@@ -14,6 +14,7 @@ interface PostProps {
 }
 
 export const Post: React.FC<PostProps> = ({title, description, imageUrl, id}) => {
+  if (!id) return null
   return (
     <Paper elevation={0} className='p-20' classes={{ root: styles.paper}}>
       <Typography variant='h5' className={styles.title}>

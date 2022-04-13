@@ -14,6 +14,7 @@ export type ResponseUser = {
   email: string,
   fullName: string,
   id: number,
+  commentsCount?: number,
   token: string,
   updateAt: string
 }
@@ -28,4 +29,13 @@ export type TPost = {
   title: string,
   updatedAt: string,
   views: number
+}
+
+export type TComment = {
+  id: number
+  post: TPost
+  text: string
+  user: ResponseUser,
+  createdAt: string,
+  updatedAt: string,
 }

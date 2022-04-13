@@ -1,13 +1,29 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Divider, Paper, Tab, Tabs, Typography} from "@material-ui/core";
 import {Comment} from "../Comment";
 import {AddCommentForm} from "../AddCommentForm";
-import data from '../../data'
+import {Api} from "../../utils/api";
+import {TComment} from "../../utils/api/types";
+import {useAppSelector} from "../../redux/hooks";
+import {selectUserData} from "../../redux/slices/user";
+import {useComments} from "../../hooks/useComments";
 
-export const PostComments: React.FC = () => {
+interface PostCommentsProps {
+  postId: number
+}
+
+export const PostComments: React.FC<PostCommentsProps> = ({postId}) => {
+  const userData = useAppSelector(selectUserData)
   const [activeTab, setActiveTab] = useState(0)
+  const {comments, setComments} = useComments(postId)
 
-  const comments = data.comments[activeTab ? 'popular' : 'new']
+  const onAddComment = (obj: TComment) => {
+    setComments(prev => [...prev, obj])
+  }
+
+  const onRemoveComment = (id: number) => {
+    setComments(prev => prev.filter(obj => obj.id !== id))
+  }
 
   return (
     <Paper elevation={0} className='mt-30 p-30'>
@@ -19,10 +35,17 @@ export const PostComments: React.FC = () => {
         </Tabs>
         <Divider className='mb-20'/>
 
-        <AddCommentForm />
+        {userData && <AddCommentForm onSuccessAdd={onAddComment} postId={postId}/>}
 
         {comments.map(obj =>
-          <Comment text={obj.text} createdAt={obj.createdAt} user={obj.user} key={obj.id}/>
+          <Comment text={obj.text}
+                   createdAt={obj.createdAt}
+                   user={obj.user}
+                   key={obj.id}
+                   id={obj.id}
+                   currentUserId={userData?.id}
+                   onRemoveComment={onRemoveComment}
+          />
         )}
       </div>
     </Paper>

@@ -13,12 +13,16 @@ import {
   Button
 } from "@material-ui/core";
 
-import AddIcon from '@material-ui/icons/Add';
 import {FollowButton} from "../components/FollowButton";
+import {GetServerSideProps, NextPage} from "next";
+import {Api} from "../utils/api";
+import {ResponseUser} from "../utils/api/types";
 
+type RatingPageProps = {
+  users: ResponseUser[]
+}
 
-export default function Rating() {
-
+const Rating: NextPage<RatingPageProps> = ({users}) => {
   return (
     <MainLayout >
       <Paper elevation={0} className='pt-20 pl-20 pr-20 mb-20'>
@@ -45,16 +49,19 @@ export default function Rating() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  <span className='mr-15'>1.</span>Вася Пупкин
-                </TableCell>
-                <TableCell align="right">540</TableCell>
-                <TableCell align="right">
-                  <FollowButton />
-
-                </TableCell>
-              </TableRow>
+              {
+                users.map(obj => (
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      <span className='mr-15'>{obj.id}</span>{obj.fullName}
+                    </TableCell>
+                    <TableCell align="right">{obj.commentsCount * 2}</TableCell>
+                    <TableCell align="right">
+                      <FollowButton />
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </TableContainer>
@@ -62,3 +69,24 @@ export default function Rating() {
     </MainLayout>
   );
 }
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  try {
+    const users = await Api(ctx).user.getAll()
+
+    return {
+      props: {
+        users
+      }
+    }
+  } catch(err) {
+    console.warn('Write page',err)
+  }
+
+  return {
+    props: {
+      users: null
+    }
+  }
+}
+
+export default Rating
